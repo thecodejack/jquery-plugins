@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Easing</title>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<style type="text/css">
+	.keyDiv {
+		width: 100px;
+		height: 20px;
+		background-color: #f00;
+		margin-bottom: 10px;
+	}
+	.floatLeft {
+		float: left;
+	}
+	.floatRight {
+		float: right;
+	}
+	.row {
+		width:100%;
+		float: left;
+	}
+</style>
+</head>
+<body>
+<div class="main"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var root=$('.main');
+	var keyElems = [];
+	//a 65-90
+	//A 
+	for (var i = 90; i >= 65; i-=1) {
+		var row = $('<div class="row"></div>');
+		var elem = new keyDiv(String.fromCharCode(i),'floatLeft');
+		elem.html.css('background-color',get_random_color());
+		row.append(elem.html);
+		keyElems[i]=elem;
+		i-=1;
+		var elem1 = new keyDiv(String.fromCharCode(i),'floatRight');
+		elem1.html.css('background-color',get_random_color());
+		row.append(elem1.html);
+		root.append(row);
+		keyElems[i]=elem1;
+	};
+	$(document).keypress(function(event){
+		var code = event.charCode;
+		if((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+			if(code>90) {
+				code -= 32;
+			}
+			var elem = keyElems[code];
+			elem.animate();
+		}
+	});
+	$(document).click(function(event){
+		if($(event.target).hasClass('keyDiv')) {
+			var elem = $(event.target).data();
+			elem.animate();
+		}
+	});
+});
+
+var keyDiv = function(value,position) {
+	this.value = value;
+	this.position = position;
+	this.html = $('<div class="keyDiv '+ position +'">' + value + '</div>');
+	this.html.data(this);
+	this.animate = function() {
+		this.html.animate({ width: "49%" }, 1000 ).animate({ width: "100px" }, 1000 );
+	}
+};
+
+function get_random_color() {
+			var letters = '0123456789ABCDEF'.split('');
+			var color = '#';
+			for (var i = 0; i < 6; i++) {
+				color += letters[Math.round(Math.random() * 15)];
+			}
+			return color;
+		}
+
+</script>
+</body>
+</html>
